@@ -89,7 +89,7 @@ export function PricingPage({ currentPlan = Plan.FREE }: PricingPageProps) {
             Choose your plan
           </h1>
           <p className="text-gray-500 text-sm">
-            1 credit = 1 video. Monthly credits reset automatically.
+            1 video per credit. Monthly videos reset automatically.
           </p>
         </div>
 
@@ -183,7 +183,7 @@ export function PricingPage({ currentPlan = Plan.FREE }: PricingPageProps) {
           <div className="space-y-1">
             <p className="text-white font-medium">Need a one-time boost?</p>
             <p className="text-gray-500 text-sm">
-              {TOPUP.credits} extra credits for €{TOPUP.price}. They never expire.
+              {TOPUP.credits} extra videos for €{TOPUP.price}. They never expire.
             </p>
           </div>
           <button
@@ -191,7 +191,7 @@ export function PricingPage({ currentPlan = Plan.FREE }: PricingPageProps) {
             disabled={!!loading}
             className="shrink-0 px-5 py-2.5 bg-white/8 hover:bg-white/12 border border-white/10 text-white text-sm font-medium rounded-xl transition-colors disabled:opacity-40"
           >
-            {loading === "topup" ? "Redirecting…" : `Buy ${TOPUP.credits} credits — €${TOPUP.price}`}
+            {loading === "topup" ? "Redirecting…" : `Buy ${TOPUP.credits} videos — €${TOPUP.price}`}
           </button>
         </div>
       </main>

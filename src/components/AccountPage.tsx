@@ -95,10 +95,10 @@ export function AccountPage({ user, subscription, credits, videosGenerated }: Ac
         {/* Stats row */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           <div className="bg-white/[0.03] border border-white/8 rounded-2xl p-5 space-y-1">
-            <p className="text-gray-500 text-xs font-medium uppercase tracking-wider">Credits left</p>
+            <p className="text-gray-500 text-xs font-medium uppercase tracking-wider">Videos left</p>
             <p className="text-3xl font-bold text-white tabular-nums">{totalCredits}</p>
             {credits.bonus > 0 && (
-              <p className="text-gray-600 text-xs">{credits.monthly} monthly + {credits.bonus} bonus</p>
+              <p className="text-gray-600 text-xs">{credits.monthly} monthly + {credits.bonus} extra</p>
             )}
           </div>
           <div className="bg-white/[0.03] border border-white/8 rounded-2xl p-5 space-y-1">
@@ -111,7 +111,7 @@ export function AccountPage({ user, subscription, credits, videosGenerated }: Ac
             <span className={`inline-flex items-center text-sm font-semibold px-2.5 py-0.5 rounded-full border ${PLAN_COLORS[plan]}`}>
               {planConfig.name}
             </span>
-            {resetDate && <p className="text-gray-600 text-xs">Credits reset {resetDate}</p>}
+            {resetDate && <p className="text-gray-600 text-xs">Videos reset {resetDate}</p>}
           </div>
         </div>
 
@@ -178,8 +178,8 @@ export function AccountPage({ user, subscription, credits, videosGenerated }: Ac
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-white font-medium">Unlock more credits</p>
-                <p className="text-gray-500 text-sm mt-0.5">Creator from €19/mo · 80 credits · no watermark</p>
+                <p className="text-white font-medium">Unlock more videos</p>
+                <p className="text-gray-500 text-sm mt-0.5">Creator from €19/mo · 80 videos/mo · no watermark</p>
               </div>
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-violet-400 shrink-0">
                 <path d="M3 8h10M9 4l4 4-4 4" strokeLinecap="round" strokeLinejoin="round"/>

@@ -35,7 +35,7 @@ export const PLANS: Record<Plan, PlanConfig> = {
     price: 19,
     creditsPerMonth: 80,
     features: [
-      "80 credits / month",
+      "80 videos / month",
       "No watermark",
       "Standard speed",
     ],
@@ -51,7 +51,7 @@ export const PLANS: Record<Plan, PlanConfig> = {
     price: 49,
     creditsPerMonth: 250,
     features: [
-      "250 credits / month",
+      "250 videos / month",
       "No watermark",
       "Priority generation",
       "Batch generation",

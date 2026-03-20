@@ -64,7 +64,7 @@ export function AppShell({ user, initialCredits, plan }: AppShellProps) {
               }`}
             >
               <span className="tabular-nums font-medium">{credits}</span>
-              <span>credit{credits !== 1 ? "s" : ""}</span>
+              <span>video{credits !== 1 ? "s" : ""}</span>
             </span>
 
             {/* Avatar dropdown */}
@@ -191,7 +191,7 @@ export function AppShell({ user, initialCredits, plan }: AppShellProps) {
 
                 {credits === 0 && (
                   <p className="text-sm text-gray-500">
-                    No credits left.{" "}
+                    No videos left.{" "}
                     <a href="/pricing" className="text-violet-400 hover:text-violet-300 underline underline-offset-2">
                       Upgrade to continue
                     </a>
