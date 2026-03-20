@@ -24,7 +24,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     // Provision FREE plan + credits on first sign-up
     async createUser({ user }) {
       if (user.id) {
-        await provisionFreeUser(user.id);
+        try {
+          await provisionFreeUser(user.id);
+        } catch (err) {
+          console.error("[auth] provisionFreeUser failed:", err);
+          // Don't block login — user can still sign in, credits will be 0
+        }
       }
     },
   },

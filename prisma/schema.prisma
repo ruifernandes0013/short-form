@@ -4,9 +4,9 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")       // Supabase pooler URL (session mode)
-  directUrl = env("DIRECT_URL")         // Supabase direct URL (for migrations)
+  provider = "postgresql"
+  url      = env("DATABASE_URL")  // Supabase pooler — works for all runtime queries
+  // directUrl is set in prisma.config.ts (CLI only) so DIRECT_URL is not required at runtime
 }
 
 // ─── Auth (required by @auth/prisma-adapter) ──────────────────────────────────

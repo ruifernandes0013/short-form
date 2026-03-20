@@ -93,6 +93,17 @@ export function AppShell({ user, initialCredits, plan }: AppShellProps) {
                       <p className="text-white text-sm font-medium truncate">{user.name ?? user.email}</p>
                       {user.name && <p className="text-gray-600 text-xs truncate mt-0.5">{user.email}</p>}
                     </div>
+                    <a
+                      href="/account"
+                      className="flex items-center gap-2.5 px-3.5 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" strokeWidth="1.5">
+                        <circle cx="6.5" cy="4" r="2.5"/>
+                        <path d="M1 12c0-3 2.5-4.5 5.5-4.5S12 9 12 12" strokeLinecap="round"/>
+                      </svg>
+                      My account
+                    </a>
                     <button
                       onClick={() => signOut({ callbackUrl: "/" })}
                       className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
