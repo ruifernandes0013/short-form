@@ -10,11 +10,16 @@ export default async function Home() {
     return <LoginPage />;
   }
 
-  // Fetch credits server-side to avoid a waterfall on first render
-  const balance = await prisma.creditBalance.findUnique({
-    where: { userId: session.user.id },
-    select: { monthlyCredits: true, bonusCredits: true },
-  });
+  const [balance, subscription] = await Promise.all([
+    prisma.creditBalance.findUnique({
+      where: { userId: session.user.id },
+      select: { monthlyCredits: true, bonusCredits: true },
+    }),
+    prisma.subscription.findUnique({
+      where: { userId: session.user.id },
+      select: { plan: true },
+    }),
+  ]);
 
   const total = (balance?.monthlyCredits ?? 0) + (balance?.bonusCredits ?? 0);
 
@@ -26,6 +31,7 @@ export default async function Home() {
         image: session.user.image ?? null,
       }}
       initialCredits={total}
+      plan={(subscription?.plan ?? "FREE") as "FREE" | "CREATOR" | "PRO"}
     />
   );
 }

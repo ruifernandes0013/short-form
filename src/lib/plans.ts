@@ -18,10 +18,10 @@ export const PLANS: Record<Plan, PlanConfig> = {
     id: Plan.FREE,
     name: "Free",
     price: 0,
-    creditsPerMonth: 5,
+    creditsPerMonth: 1,
     features: [
-      "5 credits / month",
-      "Watermarked videos",
+      "1 free video to try",
+      "Watermarked export",
       "Standard speed",
     ],
     stripePriceId: null,
