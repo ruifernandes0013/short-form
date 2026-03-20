@@ -1,4 +1,4 @@
-import { Plan } from "@/generated/prisma/client";
+import { Plan } from "@/types";
 
 export interface PlanConfig {
   id: Plan;

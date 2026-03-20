@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { PLANS, TOPUP } from "@/lib/plans";
-import { Plan } from "@/generated/prisma/client";
+import { Plan } from "@/types";
 
 interface PricingPageProps {
   currentPlan?: Plan;

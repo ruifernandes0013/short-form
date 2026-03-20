@@ -1,3 +1,10 @@
+// Mirror of the Prisma Plan enum — safe to import in client components
+export enum Plan {
+  FREE = "FREE",
+  CREATOR = "CREATOR",
+  PRO = "PRO",
+}
+
 export type PipelineStep =
   | "idle"
   | "uploading"
