@@ -33,35 +33,35 @@ export function AppShell({ user, initialCredits, plan }: AppShellProps) {
   const isActive =
     state.step !== "idle" && state.step !== "done" && state.step !== "error";
 
-  const showUpgradeFloat = plan === "FREE" && credits <= 1;
-
   const handleDone = useCallback(() => {
     setCredits((c) => Math.max(0, c - 1));
     reset();
   }, [reset]);
 
+  // suppress unused warning — plan is available for future use
+  void plan;
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] flex flex-col">
       {/* Header */}
       <header className="border-b border-white/[0.06] sticky top-0 z-20 bg-[#0a0a0a]/90 backdrop-blur-md">
-        <div className="max-w-4xl mx-auto px-5 h-13 flex items-center justify-between" style={{height: "52px"}}>
+        <div className="max-w-4xl mx-auto px-5 flex items-center justify-between" style={{ height: "52px" }}>
           <span className="font-semibold text-white tracking-tight">Short Form</span>
 
           <div className="flex items-center gap-2">
-            {/* Credits pill */}
-            <a
-              href="/pricing"
-              className={`flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full border transition-colors ${
+            {/* Credits — display only */}
+            <span
+              className={`flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-full border select-none ${
                 credits <= 0
-                  ? "border-red-500/30 bg-red-500/8 text-red-400"
-                  : "border-white/8 text-gray-500 hover:text-gray-300 hover:border-white/15"
+                  ? "border-red-500/30 text-red-400"
+                  : "border-white/8 text-gray-500"
               }`}
             >
-              <span className="tabular-nums font-medium text-[11px]">{credits}</span>
-              <span className="text-[11px]">credit{credits !== 1 ? "s" : ""}</span>
-            </a>
+              <span className="tabular-nums font-medium">{credits}</span>
+              <span>credit{credits !== 1 ? "s" : ""}</span>
+            </span>
 
-            {/* Avatar menu */}
+            {/* Avatar dropdown */}
             <div className="relative">
               <button
                 onClick={() => setMenuOpen((o) => !o)}
@@ -87,17 +87,6 @@ export function AppShell({ user, initialCredits, plan }: AppShellProps) {
                       <p className="text-white text-sm font-medium truncate">{user.name ?? user.email}</p>
                       {user.name && <p className="text-gray-600 text-xs truncate mt-0.5">{user.email}</p>}
                     </div>
-                    <a
-                      href="/pricing"
-                      className="flex items-center gap-2.5 px-3.5 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" strokeWidth="1.5">
-                        <rect x="1" y="1" width="11" height="11" rx="2"/>
-                        <path d="M4.5 6.5h4M6.5 4.5v4" strokeLinecap="round"/>
-                      </svg>
-                      Upgrade plan
-                    </a>
                     <button
                       onClick={() => signOut({ callbackUrl: "/" })}
                       className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
@@ -125,7 +114,7 @@ export function AppShell({ user, initialCredits, plan }: AppShellProps) {
               <path d="M7.5 1a6.5 6.5 0 100 13A6.5 6.5 0 007.5 1zM6.75 4.5a.75.75 0 011.5 0v3.25a.75.75 0 01-1.5 0V4.5zm.75 6a.875.875 0 110-1.75.875.875 0 010 1.75z"/>
             </svg>
             <p className="text-red-300 text-sm flex-1 leading-relaxed">{state.error}</p>
-            <button onClick={() => reset()} className="text-red-600 hover:text-red-400 transition-colors text-lg leading-none mt-0.5">×</button>
+            <button onClick={() => reset()} className="text-red-600 hover:text-red-400 transition-colors text-xl leading-none mt-0.5">×</button>
           </div>
         )}
 
@@ -219,18 +208,16 @@ export function AppShell({ user, initialCredits, plan }: AppShellProps) {
         )}
       </main>
 
-      {/* Floating upgrade button */}
-      {showUpgradeFloat && (
-        <a
-          href="/pricing"
-          className="fixed bottom-6 right-6 z-30 flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium px-4 py-2.5 rounded-full shadow-lg shadow-violet-900/40 transition-all hover:shadow-violet-900/60 hover:-translate-y-0.5"
-        >
-          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M6.5 1l1.5 3.5L12 5l-3 2.5.5 3.5L6.5 9l-3 2 .5-3.5L1 5l4-.5L6.5 1z" strokeLinejoin="round"/>
-          </svg>
-          Upgrade plan
-        </a>
-      )}
+      {/* Floating upgrade button — always visible */}
+      <a
+        href="/pricing"
+        className="fixed bottom-6 right-6 z-30 flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium px-4 py-2.5 rounded-full shadow-lg shadow-violet-900/30 transition-all hover:-translate-y-0.5"
+      >
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M6.5 1.5v10M2 5.5l4.5-4 4.5 4" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+        Upgrade
+      </a>
     </div>
   );
 }
