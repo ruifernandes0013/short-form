@@ -1,17 +1,15 @@
 import { NextResponse } from "next/server";
-import { exec } from "child_process";
-import { promisify } from "util";
+import { createRequire } from "module";
+import fs from "fs";
 
-const execAsync = promisify(exec);
+const require = createRequire(import.meta.url);
+const ffmpegPath: string | null = require("ffmpeg-static");
 
 export async function GET() {
-  const [ffmpegResult, ytdlpResult] = await Promise.allSettled([
-    execAsync("which ffmpeg || where ffmpeg"),
-    execAsync("which yt-dlp || where yt-dlp"),
-  ]);
+  const ffmpegOk = Boolean(ffmpegPath && fs.existsSync(ffmpegPath));
 
   return NextResponse.json({
-    ffmpeg: ffmpegResult.status === "fulfilled",
-    ytdlp: ytdlpResult.status === "fulfilled",
+    ffmpeg: ffmpegOk,
+    ytdlp: true,
   });
 }

@@ -1,73 +1,62 @@
 "use client";
 
 import { PipelineStep } from "@/types";
-import { clsx } from "clsx";
 
-const STEPS: { id: PipelineStep; label: string; icon: string }[] = [
-  { id: "uploading", label: "Upload", icon: "⬆" },
-  { id: "transcribing", label: "Transcribe", icon: "🎙" },
-  { id: "generating", label: "Identify", icon: "✨" },
-  { id: "clipping", label: "Cut", icon: "✂" },
-  { id: "done", label: "Done", icon: "✓" },
+const STEPS: { id: PipelineStep; label: string }[] = [
+  { id: "uploading",   label: "Upload"     },
+  { id: "transcribing", label: "Transcribe" },
+  { id: "generating",  label: "Identify"   },
+  { id: "clipping",    label: "Cut"        },
+  { id: "done",        label: "Done"       },
 ];
 
 const STEP_ORDER = ["uploading", "downloading", "transcribing", "generating", "clipping", "done"];
 
-function getStepState(
-  stepId: string,
-  currentStep: PipelineStep
-): "idle" | "active" | "done" | "error" {
-  if (currentStep === "error") return "idle";
-  if (currentStep === "idle") return "idle";
-
-  const currentIdx = STEP_ORDER.indexOf(
-    currentStep === "downloading" ? "uploading" : currentStep
-  );
-  const stepIdx = STEP_ORDER.indexOf(stepId);
-
-  if (stepIdx < currentIdx) return "done";
-  if (stepIdx === currentIdx) return "active";
+function getState(id: string, current: PipelineStep): "idle" | "active" | "done" {
+  if (current === "idle" || current === "error") return "idle";
+  const cur = STEP_ORDER.indexOf(current === "downloading" ? "uploading" : current);
+  const idx = STEP_ORDER.indexOf(id);
+  if (idx < cur) return "done";
+  if (idx === cur) return "active";
   return "idle";
 }
 
 export function StepIndicator({ step }: { step: PipelineStep }) {
   return (
-    <div className="flex items-center justify-center gap-2 mb-8">
+    <div className="flex items-center gap-1">
       {STEPS.map((s, i) => {
-        const state = getStepState(s.id, step);
+        const state = getState(s.id, step);
         return (
-          <div key={s.id} className="flex items-center gap-2">
-            <div className="flex flex-col items-center gap-1">
-              <div
-                className={clsx(
-                  "w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300",
-                  {
-                    "bg-gray-800 text-gray-500": state === "idle",
-                    "bg-violet-600 text-white ring-4 ring-violet-600/30 scale-110": state === "active",
-                    "bg-green-600 text-white": state === "done",
-                    "bg-red-600 text-white": state === "error",
-                  }
+          <div key={s.id} className="flex items-center gap-1 flex-1 last:flex-none">
+            <div className="flex flex-col items-center gap-1 min-w-0">
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ${
+                state === "active"
+                  ? "bg-violet-600 ring-4 ring-violet-600/20 scale-110"
+                  : state === "done"
+                  ? "bg-green-600"
+                  : "bg-gray-800"
+              }`}>
+                {state === "done" ? (
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" strokeWidth="2">
+                    <path d="M2 5l2.5 2.5L8 3" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                ) : state === "active" ? (
+                  <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                ) : (
+                  <div className="w-1.5 h-1.5 rounded-full bg-gray-600" />
                 )}
-              >
-                {state === "done" ? "✓" : s.icon}
               </div>
-              <span
-                className={clsx("text-xs", {
-                  "text-gray-600": state === "idle",
-                  "text-violet-400 font-semibold": state === "active",
-                  "text-green-400": state === "done",
-                })}
-              >
+              <span className={`text-xs font-medium transition-colors ${
+                state === "active" ? "text-violet-400" :
+                state === "done"   ? "text-green-400"  : "text-gray-700"
+              }`}>
                 {s.label}
               </span>
             </div>
             {i < STEPS.length - 1 && (
-              <div
-                className={clsx("w-12 h-0.5 mb-5 transition-all duration-300", {
-                  "bg-gray-800": state !== "done",
-                  "bg-green-600": state === "done",
-                })}
-              />
+              <div className={`flex-1 h-px mb-4 transition-colors duration-500 ${
+                state === "done" ? "bg-green-700" : "bg-gray-800"
+              }`} />
             )}
           </div>
         );

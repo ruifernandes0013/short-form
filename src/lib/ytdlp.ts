@@ -1,80 +1,44 @@
-import { spawn } from "child_process";
+import ytdl from "@distube/ytdl-core";
 import path from "path";
+import fs from "fs";
 
-const YTDLP_PATH = process.env.YTDLP_PATH || "yt-dlp";
-
-export function downloadYouTube(
+export async function downloadYouTube(
   url: string,
   outputDir: string,
   onProgress: (pct: number, label: string) => void
 ): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const outputTemplate = path.join(outputDir, "%(title).50s.%(ext)s");
+  const info = await ytdl.getInfo(url);
+  const title = info.videoDetails.title
+    .replace(/[^a-z0-9]/gi, "_")
+    .slice(0, 50);
+  const outputPath = path.join(outputDir, `${title}.mp4`);
 
-    const args = [
-      url,
-      "--output",
-      outputTemplate,
-      "--format",
-      "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best",
-      "--merge-output-format",
-      "mp4",
-      "--progress",
-      "--newline",
-      "--no-playlist",
-    ];
-
-    const proc = spawn(YTDLP_PATH, args);
-    let stderr = "";
-    let downloadedFile = "";
-
-    proc.stdout.on("data", (data: Buffer) => {
-      const lines = data.toString().split("\n");
-      for (const line of lines) {
-        // Parse progress: [download]  42.3% of ~123.45MiB at  1.23MiB/s ETA 00:12
-        const progressMatch = line.match(/\[download\]\s+([\d.]+)%/);
-        if (progressMatch) {
-          const pct = parseFloat(progressMatch[1]);
-          onProgress(pct, `Downloading: ${pct.toFixed(1)}%`);
-        }
-
-        // Capture output filename
-        const destMatch = line.match(/\[download\] Destination: (.+)$/);
-        if (destMatch) {
-          downloadedFile = destMatch[1].trim();
-        }
-
-        // Merged file
-        const mergeMatch = line.match(/\[Merger\] Merging formats into "(.+)"$/);
-        if (mergeMatch) {
-          downloadedFile = mergeMatch[1].trim();
-        }
-      }
-    });
-
-    proc.stderr.on("data", (data: Buffer) => {
-      stderr += data.toString();
-    });
-
-    proc.on("close", (code) => {
-      if (code === 0) {
-        if (downloadedFile) {
-          resolve(downloadedFile);
-        } else {
-          // Fallback: find the most recent file in outputDir
-          reject(new Error("yt-dlp finished but could not determine output file"));
-        }
-      } else {
-        reject(new Error(`yt-dlp exited with code ${code}: ${stderr}`));
-      }
-    });
-
-    proc.on("error", (err) => {
-      reject(
-        new Error(
-          `Failed to spawn yt-dlp: ${err.message}. Make sure yt-dlp is installed (brew install yt-dlp)`
-        )
-      );
-    });
+  // Pick best format that has both video and audio in a single file
+  const format = ytdl.chooseFormat(info.formats, {
+    quality: "highestvideo",
+    filter: "audioandvideo",
   });
+
+  const totalBytes = Number(format.contentLength ?? 0);
+
+  await new Promise<void>((resolve, reject) => {
+    const stream = ytdl.downloadFromInfo(info, { format });
+    const file = fs.createWriteStream(outputPath);
+    let downloaded = 0;
+
+    stream.on("data", (chunk: Buffer) => {
+      downloaded += chunk.length;
+      if (totalBytes > 0) {
+        const pct = (downloaded / totalBytes) * 100;
+        onProgress(pct, `Downloading: ${pct.toFixed(1)}%`);
+      }
+    });
+
+    stream.pipe(file);
+    stream.on("error", reject);
+    file.on("finish", resolve);
+    file.on("error", reject);
+  });
+
+  return outputPath;
 }
