@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     "formidable",
     "ffmpeg-static",
     "@ffprobe-installer/ffprobe",
+    "youtubei.js",
   ],
   // Tell the Next.js file tracer to include the Prisma query engine binaries
   // (which live in a custom output path excluded by .gitignore) in the
