@@ -1,4 +1,4 @@
-import { PrismaClient } from "@/generated/prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 // Reuse the client in dev to avoid exhausting DB connections during hot reload
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };

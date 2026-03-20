@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { stripe, getOrCreateStripeCustomer } from "@/lib/stripe";
 import { PLANS } from "@/lib/plans";
-import { Plan } from "@/generated/prisma/client";
+import { Plan } from "@prisma/client";
 import { z } from "zod";
 
 export const runtime = "nodejs";

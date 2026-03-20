@@ -11,12 +11,6 @@ const nextConfig: NextConfig = {
     "@ffprobe-installer/ffprobe",
     "youtubei.js",
   ],
-  // Tell the Next.js file tracer to include the Prisma query engine binaries
-  // (which live in a custom output path excluded by .gitignore) in the
-  // Vercel deployment bundle.
-  outputFileTracingIncludes: {
-    "/**": ["./src/generated/prisma/**"],
-  },
   experimental: {
     serverActions: {
       bodySizeLimit: "500mb",

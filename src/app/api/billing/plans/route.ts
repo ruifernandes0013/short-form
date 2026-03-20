@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
 import { PLANS, TOPUP } from "@/lib/plans";
-import { Plan } from "@/generated/prisma/client";
+import { Plan } from "@prisma/client";
 
 export const runtime = "nodejs";
 

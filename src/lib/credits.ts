@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/db";
-import { Plan, UsageAction } from "@/generated/prisma/client";
+import { Plan, UsageAction } from "@prisma/client";
 import { PLANS, CREDITS_PER_VIDEO } from "@/lib/plans";
 
 export class InsufficientCreditsError extends Error {
