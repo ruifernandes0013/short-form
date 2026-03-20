@@ -25,11 +25,18 @@ export default async function Home() {
 
   const plan = (subscription?.plan ?? "FREE") as Plan;
   const rawTotal = (balance?.monthlyCredits ?? 0) + (balance?.bonusCredits ?? 0);
-  // Cap displayed credits at the plan limit for FREE users so the header
-  // always reflects what the plan actually allows (1 video to try).
-  const total = plan === Plan.FREE
-    ? Math.min(rawTotal, PLANS[Plan.FREE].creditsPerMonth)
-    : rawTotal;
+  const planLimit = PLANS[Plan.FREE].creditsPerMonth; // 1
+
+  // Correct stale DB values: if a FREE user somehow has more credits than their
+  // plan allows (e.g. provisioned before the limit was reduced), fix it now.
+  if (plan === Plan.FREE && rawTotal > planLimit) {
+    await prisma.creditBalance.update({
+      where: { userId: session.user.id },
+      data: { monthlyCredits: planLimit, bonusCredits: 0 },
+    });
+  }
+
+  const total = plan === Plan.FREE ? Math.min(rawTotal, planLimit) : rawTotal;
 
   return (
     <AppShell
