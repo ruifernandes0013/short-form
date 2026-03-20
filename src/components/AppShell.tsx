@@ -42,9 +42,15 @@ export function AppShell({ user, initialCredits, plan }: AppShellProps) {
   void plan;
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex flex-col">
+    <div className="min-h-screen bg-[#080810] flex flex-col">
+      {/* Ambient background */}
+      <div className="pointer-events-none fixed inset-0 overflow-hidden">
+        <div className="absolute -top-60 -right-40 w-[500px] h-[500px] rounded-full bg-violet-600/8 blur-[120px]" />
+        <div className="absolute bottom-0 -left-40 w-[400px] h-[400px] rounded-full bg-indigo-600/6 blur-[100px]" />
+      </div>
+
       {/* Header */}
-      <header className="border-b border-white/[0.06] sticky top-0 z-20 bg-[#0a0a0a]/90 backdrop-blur-md">
+      <header className="relative border-b border-white/[0.06] sticky top-0 z-20 bg-[#080810]/90 backdrop-blur-md">
         <div className="max-w-4xl mx-auto px-5 flex items-center justify-between" style={{ height: "52px" }}>
           <span className="font-semibold text-white tracking-tight">Short Form</span>
 
@@ -105,7 +111,7 @@ export function AppShell({ user, initialCredits, plan }: AppShellProps) {
       </header>
 
       {/* Main */}
-      <main className="flex-1 max-w-4xl mx-auto w-full px-5 py-10 space-y-5">
+      <main className="relative flex-1 max-w-4xl mx-auto w-full px-5 py-10 space-y-5">
 
         {/* Error */}
         {state.step === "error" && state.error && (

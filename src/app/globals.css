@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #030712;
+  --background: #080810;
   --foreground: #f9fafb;
 }
 
@@ -17,7 +17,15 @@ body {
 ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 9px; }
 ::-webkit-scrollbar-thumb:hover { background: #374151; }
 
-/* Simple animation utilities used without the plugin */
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #a78bfa 0%, #f472b6 50%, #fb923c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animation utilities */
 @keyframes fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
